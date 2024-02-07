@@ -1,5 +1,5 @@
 <template>
-  <div class="emoji-lists">
+  <div v-if="filteredEmojis.length > 0" class="emoji-lists">
     <EmojiBox
       v-for="({ title, symbol }, i) in filteredEmojis"
       :key="i"
@@ -7,13 +7,16 @@
       :symbol="symbol"
     />
   </div>
+
+  <Empty v-else text="Oops, zero finding. Let's try another keyword!" />
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue"
 import EmojiBox from "./EmojiBox.vue"
+import Empty from "./Empty.vue"
+import { type SearchEmojiParams, searchEmoji } from "@/utils/searchEmoji"
 import type { Emoji } from "@/types"
-import { SearchEmojiParams, searchEmoji } from "@/utils/searchEmoji"
 
 const props = defineProps<Omit<SearchEmojiParams, "maxResults">>()
 const filteredEmojis = ref<Emoji[]>([])
