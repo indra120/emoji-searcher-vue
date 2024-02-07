@@ -1,11 +1,6 @@
 <template>
   <div v-if="filteredEmojis.length > 0" class="emoji-lists">
-    <EmojiBox
-      v-for="({ title, symbol }, i) in filteredEmojis"
-      :key="i"
-      :title="title"
-      :symbol="symbol"
-    />
+    <EmojiBox v-for="({ title, symbol }, i) in filteredEmojis" :key="i" :title="title" :symbol="symbol" />
   </div>
 
   <Empty v-else text="Oops, zero finding. Let's try another keyword!" />

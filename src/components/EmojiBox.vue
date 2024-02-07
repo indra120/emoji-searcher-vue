@@ -1,16 +1,32 @@
 <template>
-  <div  class="emoji-box">
+  <div @click="copyToClipboard" class="emoji-box" :class="{ 'selected' : isSelected }">
     <p class="emoji" v-html="`&#${symbol.codePointAt(0)};`"></p>
-    <p class="emoji-text">
-      {{ title }}
+    <p class="emoji-text" :class="{ 'selected-text' : isSelected }">
+      {{ isSelected ? "Copied!" : title }}
     </p>
   </div>
 </template>
 
 <script setup lang="ts">
+import { onUnmounted, onUpdated, ref } from "vue"
 import { Emoji } from "@/types"
 
-defineProps<Omit<Emoji, "keywords">>()
+const props = defineProps<Omit<Emoji, "keywords">>()
+const isSelected = ref<boolean>(false)
+const timer = ref<NodeJS.Timeout>()
+
+onUpdated(() => {
+  timer.value = setTimeout(() => (isSelected.value = false),600)
+})
+
+onUnmounted(() => {
+  clearTimeout(timer.value)
+})
+
+const copyToClipboard = () => {
+  navigator.clipboard.writeText(props.symbol)
+  isSelected.value = true
+}
 </script>
 
 <style scoped>
@@ -30,6 +46,11 @@ defineProps<Omit<Emoji, "keywords">>()
   transition: all 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }
 
+.selected {
+  transform: rotate(32deg) scale(1.4, 1.4);
+  box-shadow: var(--main-box-shadow-elevated);
+}
+
 .emoji {
   font-size: 40px;
 }
@@ -37,5 +58,10 @@ defineProps<Omit<Emoji, "keywords">>()
 .emoji-text {
   font-size: 12px;
   font-weight: 600;
+}
+
+.selected-text {
+  font-size: 16px;
+  font-weight: bold;
 }
 </style>
