@@ -2,7 +2,12 @@
   <Header />
 
   <main>
-    <EmojiLists v-if="emojiList.length > 0" :emojis="emojiList" />
+    <input v-model="search" type="text" placeholder="Search" />
+    <EmojiLists
+      v-if="emojiList.length > 0"
+      :emojis="emojiList"
+      :search="search"
+    />
   </main>
 </template>
 
@@ -14,6 +19,7 @@ import EmojiLists from "./components/EmojiLists.vue"
 
 const API_URL = "https://run.mocky.io/v3/5a982f64-218d-45d7-a380-ebe924d55631"
 const emojiList = ref<Emoji[]>([])
+const search = ref<string>("")
 
 onMounted(async () => {
   const savedList = JSON.parse(localStorage.getItem("emoji-list")!) || []
@@ -25,8 +31,6 @@ onMounted(async () => {
     emojiList.value = resJson
     localStorage.setItem("emoji-list", JSON.stringify(resJson))
   }
-
-  console.log(emojiList.value)
 })
 </script>
 
@@ -39,5 +43,15 @@ main {
   padding: 16px;
   margin: 0 auto;
   background-color: var(--main-container-color);
+}
+
+input {
+  box-shadow: var(--main-box-shadow);
+  border: none;
+  border-radius: 6px;
+  padding: 10px;
+  color: var(--main-font-color);
+  font-size: 16px;
+  font-weight: 600;
 }
 </style>

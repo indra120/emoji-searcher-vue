@@ -1,7 +1,7 @@
 <template>
   <div class="emoji-lists">
     <EmojiBox
-      v-for="({ title, symbol }, i) in emojis.splice(0, 20)"
+      v-for="({ title, symbol }, i) in filteredEmojis"
       :key="i"
       :title="title"
       :symbol="symbol"
@@ -10,10 +10,20 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref, watch } from "vue"
 import EmojiBox from "./EmojiBox.vue"
 import type { Emoji } from "@/types"
+import { SearchEmojiParams, searchEmoji } from "@/utils/searchEmoji"
 
-defineProps<{ emojis: Emoji[] }>()
+const props = defineProps<Omit<SearchEmojiParams, "maxResults">>()
+const filteredEmojis = ref<Emoji[]>([])
+
+const filter = () => {
+  filteredEmojis.value = searchEmoji(props)
+}
+
+onMounted(filter)
+watch(props, filter)
 </script>
 
 <style scoped>
