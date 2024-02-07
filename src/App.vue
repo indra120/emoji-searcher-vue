@@ -5,7 +5,26 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref } from "vue"
 import Header from "@/components/Header.vue"
+import type { Emoji } from "@/types"
+
+const API_URL = "https://run.mocky.io/v3/5a982f64-218d-45d7-a380-ebe924d55631"
+const emojiList = ref<Emoji[]>([])
+
+onMounted(async () => {
+  const savedList = JSON.parse(localStorage.getItem("emoji-list")!) || []
+  if (savedList.length > 0) {
+    emojiList.value = savedList
+  } else {
+    const res = await fetch(API_URL)
+    const resJson: Emoji[] = await res.json()
+    emojiList.value = resJson
+    localStorage.setItem("emoji-list", JSON.stringify(resJson))
+  }
+
+  console.log(emojiList.value)
+})
 </script>
 
 <style scoped>
