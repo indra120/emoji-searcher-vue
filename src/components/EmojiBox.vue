@@ -12,7 +12,7 @@ import { onUnmounted, onUpdated, ref } from "vue"
 import { Emoji } from "@/types"
 
 const props = defineProps<Omit<Emoji, "keywords">>()
-const isSelected = ref<boolean>(false)
+const isSelected = ref(false)
 const timer = ref<NodeJS.Timeout>()
 
 onUpdated(() => {

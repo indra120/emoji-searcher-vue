@@ -24,9 +24,9 @@ import type { Emoji } from "@/types"
 
 const API_URL = "https://run.mocky.io/v3/5a982f64-218d-45d7-a380-ebe924d55631"
 const emojiList = ref<Emoji[]>([])
-const search = ref<string>("")
-const isLoading = ref<boolean>(false)
-const isError = ref<boolean>(false)
+const search = ref("")
+const isLoading = ref(false)
+const isError = ref(false)
 
 onMounted(async () => {
   try {

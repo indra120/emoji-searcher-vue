@@ -1,5 +1,1 @@
-export interface Emoji {
-  title: string
-  symbol: string
-  keywords: string
-}
+export type Emoji = Record<"title" | "symbol" | "keywords", string>
